@@ -13,9 +13,12 @@ const Banner = () => {
           <h5 className="text-xl md:text-2xl lg:text-3xl text-white 2">
             Manage all your task in one place.
           </h5>
-          <button className="bg-stone-100 shadow mt-6 text-primaryColor hover:bg-gradient-to-br from-primaryColor to-[#fc6075] duration-300 hover:text-white font-bold md:text-2xl text-xl md:px-16 px-8 py-2 md:py-4 rounded-full">
-            <Link to="/login">Lets Explore</Link>
-          </button>
+          <Link
+            to="/login"
+            className="bg-stone-100 shadow mt-6 text-primaryColor hover:bg-gradient-to-br from-primaryColor to-[#fc6075] duration-300 hover:text-white font-bold md:text-2xl text-xl md:px-16 px-8 py-2 md:py-4 rounded-full"
+          >
+            Lets Explore
+          </Link>
         </div>
       </Container>
     </div>

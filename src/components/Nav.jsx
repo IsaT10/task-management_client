@@ -13,9 +13,9 @@ const Nav = () => {
   return (
     <div className="navbar  bg-stone-100 absolute left-0 right-0 mt-6 sm:mt-10 rounded-full  max-w-5xl mx-auto px-4 py-0 sm:px-10 flex justify-between">
       <div className=" flex w-full lg:w-44 justify-between items-center">
-        <div className="flex text-xl md:text-2xl text-primaryColor  font-bold  gap-2 md:gap-2 lg:gap-5 items-center">
+        <h1 className="flex text-xl md:text-2xl text-primaryColor  font-bold  gap-2 md:gap-2 lg:gap-5 items-center">
           <Link to="/">OrganizeHub</Link>
-        </div>
+        </h1>
 
         <div className="dropdown ">
           <label tabIndex={0} className="btn  btn-ghost lg:hidden ">
@@ -72,16 +72,16 @@ const Nav = () => {
           </li>
           <li>
             <NavLink
-              to="/assets"
+              to="/dashboard/home"
               className={({ isActive, isPending }) =>
                 isPending
                   ? 'pending'
                   : isActive
-                  ? 'text-blue    '
+                  ? 'text-blue  '
                   : ' hover:text-blue duration-100 tracking-tight font-semibold  '
               }
             >
-              My assets
+              Dashboard
             </NavLink>
           </li>
           <li>

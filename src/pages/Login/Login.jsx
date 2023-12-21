@@ -3,11 +3,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../../Hooks/useAuth';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { AiFillGoogleSquare } from 'react-icons/ai';
+import { FaGithubAlt, FaSquareGithub } from 'react-icons/fa6';
+import useAxios from '../../Hooks/useAxios';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [err, setErr] = useState('');
-  const { logIn } = useAuth();
+  const { logIn, googleSignIn, githubSignIn } = useAuth();
+  const axios = useAxios();
+  //github fcd3e5b535c039b0736e39d76445808a57eb0be1
 
   const {
     register,
@@ -33,6 +38,42 @@ const Login = () => {
           return;
         }
         setErr('Invalid email or password. Please try again.');
+      });
+  };
+
+  const googleSign = () => {
+    googleSignIn()
+      .then(async (result) => {
+        const userInfo = {
+          name: result?.user?.displayName,
+          email: result?.user?.email,
+          // image: result.user.photoURL,
+        };
+        const res = await axios.post('/users', userInfo);
+        console.log(res.data);
+        toast.success('Successfully Login');
+        navigate('/');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const gitHubSign = () => {
+    githubSignIn()
+      .then(async (result) => {
+        console.log(result);
+        const userInfo = {
+          name: result?.user?.displayName,
+          email: result?.user?.email,
+          // image: result.user.photoURL,
+        };
+        const res = await axios.post('/users', userInfo);
+        console.log(res.data);
+        toast.success('Successfully Login');
+        navigate('/');
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
   return (
@@ -110,16 +151,23 @@ const Login = () => {
       <p className="text-blue mt-2 text-white font-semibold text-sm">
         Or sign in with
       </p>
-      <div className="my-3 flex gap-8 text-blue hover:text-darkBlue">
-        {/* <div className=" border-2 border-blue rounded-full p-1.5 cursor-pointer ">
-          <FaGoogle className="text-xl" />
-        </div> */}
-        {/* <div
-                onClick={google}
-                className=" border-2 border-stone-700 rounded-full p-1.5"
-              >
-                <FaGoogle className="cursor-pointer" />
-              </div> */}
+      <div className="my-3 flex gap-4 text-stone-200 hover:text-darkBlue">
+        <div className="mt-0.5">
+          <FaSquareGithub
+            onClick={gitHubSign}
+            className="cursor-pointer"
+            size={30}
+          />
+        </div>
+        <div
+        // onClick={google}
+        >
+          <AiFillGoogleSquare
+            onClick={googleSign}
+            className="cursor-pointer"
+            size={33}
+          />
+        </div>
       </div>
     </div>
   );

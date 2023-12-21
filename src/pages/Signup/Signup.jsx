@@ -2,15 +2,25 @@ import { useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useAuth from '../../Hooks/useAuth';
 import { useState } from 'react';
+import { FaSquareGithub } from 'react-icons/fa6';
+import { AiFillGoogleSquare } from 'react-icons/ai';
+import useAxios from '../../Hooks/useAxios';
+import { toast } from 'react-toastify';
 // import { FaEye } from 'react-icons/fa';
 // import { toast } from 'react-toastify';
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { createUser, setLoading, userProfileUpdate } = useAuth();
+  const {
+    createUser,
+    setLoading,
+    userProfileUpdate,
+    googleSignIn,
+    githubSignIn,
+  } = useAuth();
 
   // const google = GoogleLogIn();
-  //   const axios = useAxios();
+  const axios = useAxios();
   const {
     register,
     handleSubmit,
@@ -22,12 +32,85 @@ const Signup = () => {
   const from = location.state?.from?.pathname || '/';
 
   const onSubmit = async (data) => {
-    createUser(data.email, data.password)
-      .then((result) => console.log(result))
-      .catch((err) => console.log(err));
+    console.log(data);
+    const profileImageFile = { image: data.image[0] };
+    console.log(profileImageFile);
+
+    const profile = await axios.post(
+      `${import.meta.env.VITE_IMGBB_URL}`,
+      profileImageFile,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }
+    );
+    const profileImageUrl = profile.data.data.display_url;
+    console.log(profileImageUrl);
+    createUser(data.email, data.password).then((result) => {
+      userProfileUpdate(data.name, profileImageUrl)
+        .then(() => {
+          const userInfo = {
+            name: data.name,
+            email: data.email,
+            image: profileImageUrl,
+          };
+          axios
+            .post('/users', userInfo)
+            .then((res) => {
+              console.log(res?.data);
+              if (res.data.acknowledged) {
+                setLoading(false);
+                toast.success('Successfully signup');
+                navigate(from, { replace: true });
+              }
+            })
+            .then(() => {})
+            .catch((err) => console.log(err));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      navigate('/');
+    });
+  };
+
+  const googleSign = () => {
+    googleSignIn()
+      .then(async (result) => {
+        const userInfo = {
+          name: result?.user?.displayName,
+          email: result?.user?.email,
+          // image: result.user.photoURL,
+        };
+        const res = await axios.post('/users', userInfo);
+        console.log(res.data);
+        toast.success('Successfully Login');
+        navigate('/');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const gitHubSign = () => {
+    githubSignIn()
+      .then(async (result) => {
+        console.log(result);
+        const userInfo = {
+          name: result?.user?.displayName,
+          email: result?.user?.email,
+          // image: result.user.photoURL,
+        };
+        const res = await axios.post('/users', userInfo);
+        console.log(res.data);
+        toast.success('Successfully Login');
+        navigate('/');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   return (
-    <div className="bg-[#FF6347] w-[360px] sm:w-[60%] md:w-1/2 lg:w-[40%] xl:w-[30%] mx-auto flex flex-col items-center justify-center py-6 sm:py-10  px-8  md:px-6   sm:mx-auto my-10 md:my-20 rounded-md     shadow-lg ">
+    <div className="bg-[#FF6347] w-[360px] sm:w-[60%] md:w-1/2 lg:w-[40%] xl:w-[30%] mx-auto flex flex-col items-center justify-center py-6 sm:py-10  px-8  md:px-6   sm:mx-auto my-10 md:my-8 rounded-md     shadow-lg ">
       <h3 className="text-2xl font-bold text-stone-100 mb-4">Sign up</h3>
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -49,6 +132,17 @@ const Signup = () => {
               This field is required
             </span>
           )}
+        </div>
+
+        <div className="flex flex-col gap-1.5 -mt-3">
+          <label className="font-semibold text-sm text-stone-200">
+            Profile Picture
+          </label>
+          <input
+            className="text-stone-200"
+            type="file"
+            {...register('image', { required: true })}
+          />
         </div>
 
         <div className="flex flex-col gap-1.5 -mt-3">
@@ -117,7 +211,24 @@ const Signup = () => {
       <p className="text-stone-100 mt-2 font-semibold text-sm">
         Or sign in with
       </p>
-      <div className="my-3 flex gap-8 text-blue hover:text-darkBlue"></div>
+      <div className="my-3 flex gap-8 text-stone-900 hover:text-darkBlue">
+        <div className="mt-0.5">
+          <FaSquareGithub
+            onClick={gitHubSign}
+            className="cursor-pointer"
+            size={30}
+          />
+        </div>
+        <div
+        // onClick={google}
+        >
+          <AiFillGoogleSquare
+            onClick={googleSign}
+            className="cursor-pointer"
+            size={33}
+          />
+        </div>
+      </div>
     </div>
   );
 };
