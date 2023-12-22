@@ -6,6 +6,10 @@ export default {
       colors: {
         primaryColor: '#FF6347',
       },
+      fontFamily: {
+        gloria: ['Gloria Hallelujah', 'cursive'],
+        josep: ['Josefin Sans', 'sans-serif'],
+      },
     },
   },
   plugins: [require('daisyui')],

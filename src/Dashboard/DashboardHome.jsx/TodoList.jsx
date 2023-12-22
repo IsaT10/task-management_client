@@ -50,27 +50,52 @@ const TodoList = ({ data, refetch, title, status }) => {
     }
   };
   return (
-    <div className="   mx-4 md:mx-auto px-3 py-10 ">
-      <h2 className="text-center my-5 text-2xl font-semibold">{title}</h2>
-      <div className="overflow-x-auto rounded-t-md">
-        <table className="table rounded-t-md" ref={drop}>
-          {/* head */}
-          <thead className="bg-stone-600 text-stone-100 ">
-            <tr className="">
-              <th className="font-medium">Title</th>
-              <th className="font-medium">Description</th>
-              <th className="font-medium">Priority</th>
-              <th className="font-medium">Deadline</th>
-              <th className="font-medium text-center">Action</th>
-              <th className="font-medium text-center">Action</th>
-            </tr>
-          </thead>
-          {data.map((todo) => (
-            <List key={todo._id} todo={todo} refetch={refetch} />
-          ))}
-        </table>
+    <>
+      <div className=" md:mx-auto py-6  md:py-10 ">
+        <h2 className="text-center my-5 text-2xl font-semibold " ref={drop}>
+          {title}
+        </h2>
+
+        {!data?.length ? (
+          <>
+            {!status?.length ? (
+              <h4 className="text-center text-red-500 text-xl sm:text-2xl md:text-3xl font-semibold h-[55vh] flex flex-col items-center justify-center">
+                No tasks have been added yet
+              </h4>
+            ) : (
+              <h4 className="text-center text-red-500 text-xl sm:text-2xl md:text-3xl font-semibold">
+                There are currently no {status} items
+              </h4>
+            )}
+          </>
+        ) : (
+          <div className="overflow-x-auto rounded-t-md">
+            <table className="table rounded-t-md">
+              {/* head */}
+              <thead className="bg-stone-900 text-stone-100">
+                <tr className="">
+                  <th className="font-medium lg:text-base">Title</th>
+                  <th className="font-medium lg:text-base md:block hidden">
+                    Description
+                  </th>
+                  <th className="font-medium lg:text-base">Priority</th>
+                  <th className="font-medium lg:text-base">Deadline</th>
+                  <th className="font-medium text-center lg:text-base">
+                    Action
+                  </th>
+                  <th className="font-medium text-center lg:text-base">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              {data.map((todo) => (
+                <List key={todo._id} todo={todo} refetch={refetch} />
+              ))}
+            </table>
+          </div>
+        )}
       </div>
-    </div>
+    </>
   );
 };
 

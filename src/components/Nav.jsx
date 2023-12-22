@@ -18,7 +18,7 @@ const Nav = () => {
         </h1>
 
         <div className="dropdown ">
-          <label tabIndex={0} className="btn  btn-ghost lg:hidden ">
+          <label tabIndex={0} className="btn  btn-ghost md:hidden ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -37,25 +37,31 @@ const Nav = () => {
 
           <ul
             tabIndex={0}
-            className="menu menu-compact dropdown-content -left-20 mt-3 p-2 shadow  w-36 mr-10 z-40 text-white rounded-md  bg-blue"
+            className="menu menu-compact dropdown-content -left-20 mt-3 p-2   w-36 mr-10 z-40 text-stone-900 rounded-md  bg-stone-100 "
           >
-            <li>
+            <li className="hover:bg-primaryColor focus:bg-primaryColor active:bg-primaryColor rounded-md hover:text-white font-semibold duration-200">
               <Link to="/">Home</Link>
             </li>
-            <li>
-              <Link to="/signupAsEmployee">Join as Employee</Link>
+            <li className="hover:bg-primaryColor focus:bg-primaryColor active:bg-primaryColor rounded-md hover:text-white font-semibold duration-200">
+              <Link to="/dashboard/taskManage">Dashboard</Link>
             </li>
-            <li>
-              <Link to="/signupAsHR">Join As HR</Link>
+            <li className="hover:bg-primaryColor focus:bg-primaryColor active:bg-primaryColor rounded-md hover:text-white font-semibold duration-200">
+              <Link to="/about">About</Link>
             </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
+            {user?.email ? (
+              <li className="hover:bg-primaryColor focus:bg-primaryColor active:bg-primaryColor rounded-md hover:text-white font-semibold duration-200">
+                <button onClick={handleLogout}>Logout</button>
+              </li>
+            ) : (
+              <li className="hover:bg-primaryColor focus:bg-primaryColor active:bg-primaryColor rounded-md hover:text-white font-semibold duration-200">
+                <Link to="/login">Login</Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>
-      <div className=" hidden lg:flex relative">
-        <ul className="flex gap-4 items-center">
+      <div className=" hidden md:flex relative">
+        <ul className="flex gap-4 items-center -mr-4">
           <li>
             <NavLink
               to="/"
@@ -63,8 +69,8 @@ const Nav = () => {
                 isPending
                   ? 'pending'
                   : isActive
-                  ? 'text-blue  tracking-tight font-semibold   '
-                  : '  hover:text-blue duration-100 tracking-tight font-semibold   '
+                  ? 'text-primaryColor    tracking-tight   font-semibold   '
+                  : '  hover:text-primaryColor duration-100   tracking-tight font-semibold   '
               }
             >
               Home
@@ -72,13 +78,13 @@ const Nav = () => {
           </li>
           <li>
             <NavLink
-              to="/dashboard/home"
+              to="/dashboard/taskManage"
               className={({ isActive, isPending }) =>
                 isPending
                   ? 'pending'
                   : isActive
-                  ? 'text-blue  '
-                  : ' hover:text-blue duration-100 tracking-tight font-semibold  '
+                  ? 'text-primaryColor    tracking-tight   font-semibold '
+                  : ' hover:text-primaryColor duration-100   tracking-tight font-semibold  '
               }
             >
               Dashboard
@@ -86,59 +92,58 @@ const Nav = () => {
           </li>
           <li>
             <NavLink
-              to="/myTeam"
+              to="/about"
               className={({ isActive, isPending }) =>
                 isPending
                   ? 'pending'
                   : isActive
-                  ? 'text-blue    '
-                  : ' hover:text-blue duration-100 tracking-tight font-semibold  '
+                  ? 'text-primaryColor     tracking-tight  font-semibold   '
+                  : ' hover:text-primaryColor duration-100   tracking-tight font-semibold  '
               }
             >
               About
             </NavLink>
           </li>
 
-          <li>
-            <NavLink
-              to="/login"
-              className={({ isActive, isPending }) =>
-                isPending
-                  ? 'pending'
-                  : isActive
-                  ? 'text-blue  tracking-tight font-semibold   '
-                  : '  hover:text-blue duration-100 tracking-tight font-semibold   '
-              }
-            >
-              Login
-            </NavLink>
-          </li>
-
-          {/* {userData?.image ? (
-                    <div
-                      onClick={() => setIsOpen(!isOpen)}
-                      className="avatar cursor-pointer flex items-center"
-                    >
-                      <div className="w-10 rounded-full">
-                        <img src={userData?.image} alt="" />
-                      </div>
-                      <div className="border-2 border-stone-500 pr-1 border-l-0 rounded-r-lg ">
-                        <IoMdArrowDropdown className="text-stone-500 text-lg mt-0.5" />
-                      </div>
-                    </div>
-                  ) : (
-                    <div
-                      onClick={() => setIsOpen(!isOpen)}
-                      className="avatar cursor-pointer flex items-center"
-                    >
-                      <div className="w-10 rounded-full bg-transparent">
-                        <img src={avatar} alt="avatar" />
-                      </div>
-                      <div className="border-2 border-stone-500 pr-1 border-l-0 rounded-r-lg ">
-                        <IoMdArrowDropdown className="text-stone-500 text-lg mt-0.5" />
-                      </div>
-                    </div>
-                  )} */}
+          {user?.email ? (
+            <div className="dropdown dropdown-end">
+              <div tabIndex={0} role="button" className="w-10">
+                <img
+                  src={user?.photoURL}
+                  className="w-10 h-10 object-cover rounded-full"
+                  alt=""
+                />
+              </div>
+              <ul
+                tabIndex={0}
+                className="dropdown-content z-[1] menu px-4 py-2 bg-stone-100 mt-4 rounded-md w-max"
+              >
+                <li>
+                  <button
+                    onClick={handleLogout}
+                    className="hover:bg-primaryColor hover:text-stone-100 font-semibold "
+                  >
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            </div>
+          ) : (
+            <li>
+              <NavLink
+                to="/login"
+                className={({ isActive, isPending }) =>
+                  isPending
+                    ? 'pending'
+                    : isActive
+                    ? 'text-primaryColor   tracking-tight   font-semibold '
+                    : '  hover:text-primaryColor duration-100   tracking-tight font-semibold   '
+                }
+              >
+                Login
+              </NavLink>
+            </li>
+          )}
         </ul>
       </div>
     </div>

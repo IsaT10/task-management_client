@@ -3,6 +3,7 @@ import './Optimized.css';
 import developer from '../../assets/developer.png';
 import student from '../../assets/student.png';
 import professional from '../../assets/professional.png';
+import Heading from '../Heading';
 
 const works = [
   {
@@ -26,10 +27,7 @@ const Optimized = () => {
   return (
     <Container>
       <div className="flex flex-col items-center justify-center mt-20 mb-10">
-        <h3 className="bg-primaryColor px-6 py-1 text-xl font-semibold -rotate-6 text-white">
-          Benefit
-        </h3>
-        <h5 className="text-3xl font-bold mt-2">Discover Who Benefits Most</h5>
+        <Heading title="Benefit" subTitle="Discover Who Benefits Most" />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-center   justify-between my-16">
           {works.map((work, i) => (

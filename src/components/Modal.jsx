@@ -43,10 +43,10 @@ const Modal = ({
   };
   return (
     <>
-      <div className="fixed inset-0 z-10 overflow-y-auto">
+      <div className="fixed inset-0 z-[999] overflow-y-auto">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="bg-red-100 modal-box min-w-[600px] mt-36 mx-auto overflow-x-hidden"
+          className="bg-red-100 modal-box  md:min-w-[600px] mt-36 mx-auto overflow-x-hidden"
         >
           <div className=" flex flex-col items-start gap-2">
             <label className="font-semibold">Title</label>

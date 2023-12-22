@@ -36,7 +36,7 @@ const AddTaskModal = ({ refetch, setShowModal }) => {
   };
   return (
     <>
-      <div className="fixed bg-opacity-30 inset-0 z-10 overflow-y-auto">
+      <div className="fixed bg-opacity-30 inset-0 z-[999] overflow-y-auto">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="modal-box md:min-w-[600px] mt-36 mx-auto overflow-x-hidden bg-red-100"

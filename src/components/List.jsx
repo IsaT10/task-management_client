@@ -9,6 +9,21 @@ import { useDrag } from 'react-dnd';
 const List = ({ todo, refetch }) => {
   const [showModal, setShowModal] = useState(false);
   const axios = useAxios();
+
+  const inputDate = new Date(todo?.deadline);
+  const currentDate = new Date();
+  const HoursRemaining = Math.floor(
+    (currentDate - inputDate) / (1000 * 60 * 60)
+  );
+
+  const formattedDate = new Date(todo?.deadline)
+    .toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    })
+    .replace(/\//g, '-');
+
   const [{ isDragging }, dragRef] = useDrag(
     () => ({
       type: 'task',
@@ -19,8 +34,6 @@ const List = ({ todo, refetch }) => {
     }),
     []
   );
-
-  console.log(isDragging);
 
   const handleDelete = async (id) => {
     console.log(id);
@@ -34,28 +47,28 @@ const List = ({ todo, refetch }) => {
   };
 
   return (
-    <tbody key={todo._id} className="" ref={dragRef}>
-      <tr className="border-b-2 border-stone-200">
-        <td className=" font-semibold w-[30%] ">
-          <p>{todo.title}</p>
+    <tbody key={todo?._id} className="" ref={dragRef} draggable>
+      <tr className="border-b-2  border-stone-200 cursor-grab">
+        <td className=" font-semibold text-base w-[30%] ">
+          <p>{todo?.title}</p>
         </td>
-        <td className="  w-[35%]">
-          <p>{todo.description}</p>
+        <td className="text-base  md:block mt-1  hidden w-[30%]">
+          <p>{todo?.description}</p>
         </td>
-        <td className="w-20">
-          <p>{todo.priority}</p>
+        <td className="sm:text-base w-28">
+          <p>{todo?.priority}</p>
         </td>
-        <td className="w-20">
-          <p>{todo.deadline}</p>
+        <td className="sm:text-base w-32">
+          <p>{Math.abs(HoursRemaining)}hrs</p>
         </td>
-        <td className="w-10 text-center">
+        <td className="w-6 text-center ">
           <button onClick={() => setShowModal(true)} className="text-blue-600">
             <MdEditSquare size={25} />
           </button>
         </td>
-        <td className="w-10 text-center">
+        <td className="w-6 text-center ">
           <button
-            onClick={() => handleDelete(todo._id)}
+            onClick={() => handleDelete(todo?._id)}
             className="text-red-600"
           >
             <FaTrashAlt size={22} />
@@ -64,12 +77,12 @@ const List = ({ todo, refetch }) => {
       </tr>
       {showModal ? (
         <Modal
-          title={todo.title}
-          description={todo.description}
-          priority={todo.priority}
-          deadline={todo.deadline}
+          title={todo?.title}
+          description={todo?.description}
+          priority={todo?.priority}
+          deadline={todo?.deadline}
           refetch={refetch}
-          id={todo._id}
+          id={todo?._id}
           setShowModal={setShowModal}
         />
       ) : null}

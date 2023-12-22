@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { AiFillGoogleSquare } from 'react-icons/ai';
 import { FaGithubAlt, FaSquareGithub } from 'react-icons/fa6';
 import useAxios from '../../Hooks/useAxios';
+import { FaEye } from 'react-icons/fa';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -30,7 +31,7 @@ const Login = () => {
     logIn(data?.email, data?.password)
       .then((result) => {
         toast.success('Successfully Login');
-        navigate('/');
+        navigate('/dashboard/taskManage');
       })
       .catch((err) => {
         if (err.code === 'auth/network-request-failed') {
@@ -52,7 +53,7 @@ const Login = () => {
         const res = await axios.post('/users', userInfo);
         console.log(res.data);
         toast.success('Successfully Login');
-        navigate('/');
+        navigate('/dashboard/taskManage');
       })
       .catch((error) => {
         console.log(error);
@@ -70,7 +71,7 @@ const Login = () => {
         const res = await axios.post('/users', userInfo);
         console.log(res.data);
         toast.success('Successfully Login');
-        navigate('/');
+        navigate('/dashboard/taskManage');
       })
       .catch((error) => {
         console.log(error);
@@ -130,10 +131,10 @@ const Login = () => {
             </span>
           )}
 
-          {/* <FaEye
+          <FaEye
             onClick={() => setShowPassword(!showPassword)}
             className="absolute top-12 right-5 text-stone-800 cursor-pointer"
-          /> */}
+          />
         </div>
         {err ? <p className="text-red-600 text-sm">{err}</p> : ''}
         <button

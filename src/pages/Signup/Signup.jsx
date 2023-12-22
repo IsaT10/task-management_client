@@ -6,6 +6,7 @@ import { FaSquareGithub } from 'react-icons/fa6';
 import { AiFillGoogleSquare } from 'react-icons/ai';
 import useAxios from '../../Hooks/useAxios';
 import { toast } from 'react-toastify';
+import { FaEye } from 'react-icons/fa';
 // import { FaEye } from 'react-icons/fa';
 // import { toast } from 'react-toastify';
 
@@ -60,7 +61,7 @@ const Signup = () => {
               if (res.data.acknowledged) {
                 setLoading(false);
                 toast.success('Successfully signup');
-                navigate(from, { replace: true });
+                navigate('/dashboard/taskManage');
               }
             })
             .then(() => {})
@@ -70,7 +71,7 @@ const Signup = () => {
           console.log(error);
         });
 
-      navigate('/');
+      navigate('/dashboard/taskManage');
     });
   };
 
@@ -85,7 +86,7 @@ const Signup = () => {
         const res = await axios.post('/users', userInfo);
         console.log(res.data);
         toast.success('Successfully Login');
-        navigate('/');
+        navigate('/dashboard/taskManage');
       })
       .catch((error) => {
         console.log(error);
@@ -103,7 +104,7 @@ const Signup = () => {
         const res = await axios.post('/users', userInfo);
         console.log(res.data);
         toast.success('Successfully Login');
-        navigate('/');
+        navigate('/dashboard/taskManage');
       })
       .catch((error) => {
         console.log(error);
@@ -190,10 +191,10 @@ const Signup = () => {
             </span>
           )}
 
-          {/* <FaEye
+          <FaEye
             onClick={() => setShowPassword(!showPassword)}
             className="absolute top-12 right-5 text-stone-800 cursor-pointer"
-          /> */}
+          />
         </div>
 
         <button

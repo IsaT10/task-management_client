@@ -6,6 +6,8 @@ import Login from '../pages/Login/Login';
 import Signup from '../pages/Signup/Signup';
 import DashboardHome from '../Dashboard/DashboardHome.jsx/DashboardHome';
 import DashboardLayout from '../Layouts/DashboardLayout';
+import AllTask from '../Dashboard/AllTask.jsx/AllTask';
+import PrivateRoute from './PrivateRoute';
 
 const router = createBrowserRouter([
   {
@@ -20,7 +22,24 @@ const router = createBrowserRouter([
   {
     path: 'dashboard',
     element: <DashboardLayout />,
-    children: [{ path: 'home', element: <DashboardHome /> }],
+    children: [
+      {
+        path: 'taskManage',
+        element: (
+          <PrivateRoute>
+            <DashboardHome />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: 'alltask',
+        element: (
+          <PrivateRoute>
+            <AllTask />
+          </PrivateRoute>
+        ),
+      },
+    ],
   },
 
   { path: '/login', element: <Login /> },
