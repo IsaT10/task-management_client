@@ -33,9 +33,7 @@ const Signup = () => {
   const from = location.state?.from?.pathname || '/';
 
   const onSubmit = async (data) => {
-    console.log(data);
     const profileImageFile = { image: data.image[0] };
-    console.log(profileImageFile);
 
     const profile = await axios.post(
       `${import.meta.env.VITE_IMGBB_URL}`,
@@ -45,7 +43,6 @@ const Signup = () => {
       }
     );
     const profileImageUrl = profile.data.data.display_url;
-    console.log(profileImageUrl);
     createUser(data.email, data.password).then((result) => {
       userProfileUpdate(data.name, profileImageUrl)
         .then(() => {
@@ -57,7 +54,6 @@ const Signup = () => {
           axios
             .post('/users', userInfo)
             .then((res) => {
-              console.log(res?.data);
               if (res.data.acknowledged) {
                 setLoading(false);
                 toast.success('Successfully signup');
@@ -68,7 +64,7 @@ const Signup = () => {
             .catch((err) => console.log(err));
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
         });
 
       navigate('/dashboard/taskManage');
@@ -84,30 +80,27 @@ const Signup = () => {
           // image: result.user.photoURL,
         };
         const res = await axios.post('/users', userInfo);
-        console.log(res.data);
         toast.success('Successfully Login');
         navigate('/dashboard/taskManage');
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   };
   const gitHubSign = () => {
     githubSignIn()
       .then(async (result) => {
-        console.log(result);
         const userInfo = {
           name: result?.user?.displayName,
           email: result?.user?.email,
           // image: result.user.photoURL,
         };
         const res = await axios.post('/users', userInfo);
-        console.log(res.data);
         toast.success('Successfully Login');
         navigate('/dashboard/taskManage');
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   };
   return (

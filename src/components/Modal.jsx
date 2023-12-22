@@ -12,6 +12,9 @@ const Modal = ({
   setShowModal,
 }) => {
   const axios = useAxios();
+
+  const currentDate = new Date();
+
   const {
     register,
     reset,
@@ -20,8 +23,6 @@ const Modal = ({
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log(data);
-
     const updateDetails = {
       title: data.title,
       deadline: data.deadline,
@@ -29,11 +30,23 @@ const Modal = ({
       description: data.description,
     };
 
-    console.log(updateDetails);
+    const inputDate = new Date(data.deadline);
+
+    const daysRemaining = Math.floor(
+      (currentDate - inputDate) / (1000 * 60 * 60 * 24)
+    );
+
+    if (new Date(data.deadline).getTime() <= currentDate.getTime()) {
+      toast.error('The Date must be Bigger or Equal to today date');
+      return;
+    }
+    if (Math.abs(daysRemaining) > 15) {
+      toast.error('Date difference exceeds limit');
+      return;
+    }
 
     const res = await axios.patch(`/todos/${id}`, updateDetails);
 
-    console.log(res.data);
     if (res?.data?.acknowledged) {
       toast.success('Task Updated');
       reset();

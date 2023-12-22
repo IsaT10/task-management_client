@@ -51,30 +51,27 @@ const Login = () => {
           // image: result.user.photoURL,
         };
         const res = await axios.post('/users', userInfo);
-        console.log(res.data);
         toast.success('Successfully Login');
         navigate('/dashboard/taskManage');
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   };
   const gitHubSign = () => {
     githubSignIn()
       .then(async (result) => {
-        console.log(result);
         const userInfo = {
           name: result?.user?.displayName,
           email: result?.user?.email,
           // image: result.user.photoURL,
         };
         const res = await axios.post('/users', userInfo);
-        console.log(res.data);
         toast.success('Successfully Login');
         navigate('/dashboard/taskManage');
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   };
   return (

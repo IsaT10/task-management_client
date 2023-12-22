@@ -22,7 +22,6 @@ const TodoList = ({ data, refetch, title, status }) => {
     if (status === 'ongoing') {
       const res = await axios.patch(`/todos/${id}`, { taskProgress: status });
 
-      console.log(res.data);
       if (res?.data?.acknowledged) {
         toast.success('Task Updated');
         refetch();
@@ -32,7 +31,6 @@ const TodoList = ({ data, refetch, title, status }) => {
         taskProgress: status,
       });
 
-      console.log(res.data);
       if (res?.data?.acknowledged) {
         toast.success('Task Updated');
         refetch();
@@ -42,7 +40,6 @@ const TodoList = ({ data, refetch, title, status }) => {
         taskProgress: status,
       });
 
-      console.log(res.data);
       if (res?.data?.acknowledged) {
         toast.success('Task Updated');
         refetch();
@@ -51,10 +48,8 @@ const TodoList = ({ data, refetch, title, status }) => {
   };
   return (
     <>
-      <div className=" md:mx-auto py-6  md:py-10 ">
-        <h2 className="text-center my-5 text-2xl font-semibold " ref={drop}>
-          {title}
-        </h2>
+      <div className=" md:mx-auto py-6  md:py-10 " ref={drop}>
+        <h2 className="text-center my-5 text-2xl font-semibold ">{title}</h2>
 
         {!data?.length ? (
           <>

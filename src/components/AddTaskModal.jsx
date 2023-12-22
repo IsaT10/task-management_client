@@ -2,10 +2,14 @@ import { useForm } from 'react-hook-form';
 import useAxios from '../Hooks/useAxios';
 import { toast } from 'react-toastify';
 import useAuth from '../Hooks/useAuth';
+import { useState } from 'react';
 
 const AddTaskModal = ({ refetch, setShowModal }) => {
   const { user } = useAuth();
   const axios = useAxios();
+
+  const currentDate = new Date();
+
   const {
     register,
     reset,
@@ -24,6 +28,24 @@ const AddTaskModal = ({ refetch, setShowModal }) => {
       taskProgress: 'to-do',
       email: user?.email,
     };
+
+    const inputDate = new Date(data.deadline);
+
+    const daysRemaining = Math.floor(
+      (currentDate - inputDate) / (1000 * 60 * 60 * 24)
+    );
+    // console.log(daysRemaining);
+
+    if (new Date(data.deadline).getTime() <= currentDate.getTime()) {
+      // console.log(daysRemaining);
+
+      toast.error('The Date must be Bigger or Equal to today date');
+      return;
+    }
+    if (Math.abs(daysRemaining) > 15) {
+      toast.error('Date difference exceeds limit');
+      return;
+    }
 
     const res = await axios.post('/todos', taskDetails);
 

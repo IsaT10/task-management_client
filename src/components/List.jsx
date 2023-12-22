@@ -15,6 +15,9 @@ const List = ({ todo, refetch }) => {
   const HoursRemaining = Math.floor(
     (currentDate - inputDate) / (1000 * 60 * 60)
   );
+  const daysRemaining = Math.floor(
+    (currentDate - inputDate) / (1000 * 60 * 60 * 24)
+  );
 
   const formattedDate = new Date(todo?.deadline)
     .toLocaleDateString('en-US', {
@@ -36,14 +39,14 @@ const List = ({ todo, refetch }) => {
   );
 
   const handleDelete = async (id) => {
-    console.log(id);
+    // console.log(id);
     const res = await axios.delete(`/todos/${id}`);
 
     if (res?.data.deletedCount) {
       toast.success('Task Deleted');
       refetch();
     }
-    console.log(res.data);
+    // console.log(res.data);
   };
 
   return (
@@ -58,8 +61,17 @@ const List = ({ todo, refetch }) => {
         <td className="sm:text-base w-28">
           <p>{todo?.priority}</p>
         </td>
-        <td className="sm:text-base w-32">
-          <p>{Math.abs(HoursRemaining)}hrs</p>
+        <td className="sm:text-base w-32 cursor-default">
+          <div
+            className="tooltip tooltip-left bg-white"
+            data-tip={`${Math.abs(HoursRemaining)} hrs`}
+          >
+            <p className="">
+              {Math.abs(daysRemaining)}{' '}
+              {Math.abs(daysRemaining) > 1 ? 'days' : 'day'}
+            </p>
+          </div>
+          {/* <p>{Math.abs(HoursRemaining)}hrs</p> */}
         </td>
         <td className="w-6 text-center ">
           <button onClick={() => setShowModal(true)} className="text-blue-600">

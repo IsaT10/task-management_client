@@ -13,8 +13,6 @@ const DashboardHome = () => {
   const ongoing = data?.filter((todo) => todo.taskProgress === 'ongoing');
   const completed = data?.filter((todo) => todo.taskProgress === 'completed');
 
-  console.log(to_do);
-  // console.log(completed);
 
   return (
     <>

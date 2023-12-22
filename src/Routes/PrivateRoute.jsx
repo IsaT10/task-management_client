@@ -5,8 +5,6 @@ const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
 
-  console.log(loading);
-
   if (loading) {
     return (
       <div className="min-h-[calc(100vh-80px)] text-black flex flex-col items-center justify-center">
