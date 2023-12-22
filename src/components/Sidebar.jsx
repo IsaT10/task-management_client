@@ -2,11 +2,12 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 import { NavLink } from 'react-router-dom';
 import { MdDashboard } from 'react-icons/md';
 import useAuth from '../Hooks/useAuth';
+import { FaHome } from 'react-icons/fa';
 
 const Sidebar = () => {
   const { user } = useAuth();
   return (
-    <div className="drawer md:drawer-open">
+    <div className="drawer md:drawer-open sticky top-0">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content h-screen w-max bg-primaryColor  flex flex-col items-start justify-start">
         {/* Page content here */}
@@ -72,7 +73,7 @@ const Sidebar = () => {
                     : ' text-blue font-semibold text-stone-100 border-stone-100 px-6 rounded-md  text-lg text-center flex items-center gap-2 hover:bg-stone-100 hover:text-primaryColor duration-300 py-1.5'
                 }
               >
-                <MdDashboard />
+                <FaHome />
                 <span>Home</span>
               </NavLink>
             </span>

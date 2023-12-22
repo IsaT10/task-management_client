@@ -1,105 +1,102 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useAxios from '../../Hooks/useAxios';
+import { toast } from 'react-toastify';
+import { useQuery } from '@tanstack/react-query';
+import { FaTrashAlt } from 'react-icons/fa';
+import { MdEditSquare } from 'react-icons/md';
+import Modal from '../../components/Modal';
+import List from '../../components/List';
+import TodoList from './TodoList';
+import useAuth from '../../Hooks/useAuth';
+import AddTaskModal from '../../components/AddTaskModal';
 
 const DashboardHome = () => {
+  const [showModal, setShowModal] = useState(false);
+  const { user } = useAuth();
   const axios = useAxios();
+
+  const {
+    data = [],
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ['todos', user?.email],
+    queryFn: async () => {
+      const res = await axios.get(`/todos?email=${user?.email}`);
+
+      // console.log(res.data);
+      return res.data;
+    },
+  });
+
+  const to_do = data?.filter((todo) => todo.taskProgress === 'to-do');
+  const ongoing = data?.filter((todo) => todo.taskProgress === 'ongoing');
+  const completed = data?.filter((todo) => todo.taskProgress === 'completed');
+
+  // console.log(completed);
   const {
     register,
     reset,
     formState: { errors },
     handleSubmit,
   } = useForm();
+
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
 
     const taskDetails = {
       title: data.title,
       deadline: data.deadline,
       priority: data.priority,
       description: data.description,
+      taskProgress: 'to-do',
+      email: user?.email,
     };
 
     const res = await axios.post('/todos', taskDetails);
-    console.log(res?.data);
 
-    reset();
+    if (res?.data?.acknowledged) {
+      toast.success('Task added');
+      reset();
+      refetch();
+    }
   };
+
   return (
-    <section>
-      <h3>TO-DO Lists</h3>
-      <div className="">
-        <h3 className="text-2xl font-semibold">Add new task</h3>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col items-start gap-5 w-[400px] md:w-[500px] lg:w-[650px]  "
-        >
-          <div className="flex lg:flex-row flex-col  lg:items-end w-full justify-between gap-4">
-            <div className="flex flex-col  items-start w-full">
-              <label className="text-stone-600 font-semibold">Title</label>
-              <input
-                className="py-1 min-w-full px-2 text-lg outline-none rounded-md border-2 outline-2 border-stone-500"
-                type="text"
-                required
-                {...register('title', { required: true })}
-                aria-invalid={errors.title ? 'true' : 'false'}
-              />
-              {errors.title?.type === 'required' && <p>Title is required</p>}
-            </div>
+    <>
+      <section className="mx-10">
+        <TodoList
+          data={to_do}
+          refetch={refetch}
+          title="Todo List"
+          status="to-do"
+        />
+        <button onClick={() => setShowModal(true)}>Add new task</button>
+      </section>
 
-            <div className="flex items-end gap-4 ">
-              <div className="flex flex-col gap- items-start">
-                <label className="text-stone-600 font-semibold">Deadline</label>
-                <input
-                  className="py-[3px]  px-2 text-lg outline-none rounded-md border-2 outline-2 border-stone-500"
-                  type="date"
-                  {...register('deadline', {
-                    required: true,
-                  })}
-                />
-              </div>
+      <section className="mx-10">
+        <TodoList
+          data={ongoing}
+          refetch={refetch}
+          title="Ongoing List"
+          status="ongoing"
+        />
+      </section>
 
-              <div>
-                <select
-                  className="py-[6px] px-2 text-lg outline-none rounded-md border-2 outline-2 border-stone-500"
-                  required
-                  defaultValue="null"
-                  {...register('priority', { required: true })}
-                >
-                  <option disabled value="null">
-                    Priority
-                  </option>
-                  <option value="Low">Low</option>
-                  <option value="Moderate">Moderate</option>
-                  <option value="High">High</option>
-                </select>
-                {errors.priority && (
-                  <span className="text-red-600 font-semibold -mt-1.5 ml-px text-sm tracking-wide">
-                    This field is required
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col items-start min-w-full">
-            <label className="text-stone-600 font-semibold">Description</label>
-            <input
-              className="py-1 min-w-full px-2 text-lg outline-none rounded-md border-2 outline-2 border-stone-500"
-              type="text"
-              required
-              {...register('description', { required: true })}
-              aria-invalid={errors.description ? 'true' : 'false'}
-            />
-            {errors.description?.type === 'required' && (
-              <p>Description is required</p>
-            )}
-          </div>
-          <button className="bg-primaryColor px-4 py-1.5 rounded-md text-white font-semibold">
-            Add Task
-          </button>
-        </form>
-      </div>
-    </section>
+      <section className="mx-10">
+        <TodoList
+          data={completed}
+          refetch={refetch}
+          title="Completed List"
+          status="completed"
+        />
+      </section>
+
+      {showModal ? (
+        <AddTaskModal refetch={refetch} setShowModal={setShowModal} />
+      ) : null}
+    </>
   );
 };
 
